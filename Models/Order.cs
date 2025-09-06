@@ -18,4 +18,5 @@ public class Order
   public DateTime OrderDate { get; set; }
   public decimal TotalAmount { get; set; }
   public Status Status { get; set; }
+  public virtual List<OrderItem> OrderItems { get; set; } = [];
 }

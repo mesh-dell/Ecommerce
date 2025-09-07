@@ -25,8 +25,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     base.OnModelCreating(builder);
 
     builder.Entity<Product>()
-    .HasOne(p => p.Category)
-    .WithMany(c => c.Products)
+    .HasOne<Category>()
+    .WithMany()
     .HasForeignKey(p => p.CategoryId);
 
     builder.Entity<Cart>()

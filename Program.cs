@@ -47,6 +47,7 @@ builder.Services.AddAuthentication(
 });
 
 builder.Services.AddControllers();
+builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 

@@ -51,6 +51,16 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     .WithMany()
     .HasForeignKey(oi => oi.ProductId);
 
+    builder.Entity<AppUser>()
+    .HasOne<Cart>()
+    .WithOne()
+    .HasForeignKey<Cart>(c => c.UserId);
+
+    builder.Entity<AppUser>()
+    .HasMany<Order>()
+    .WithOne()
+    .HasForeignKey(c => c.UserId);
+
 
     List<IdentityRole> roles = [
       new() { Id = "1", Name = "Admin", NormalizedName = "ADMIN" },

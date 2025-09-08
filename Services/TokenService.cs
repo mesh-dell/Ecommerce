@@ -19,10 +19,11 @@ public class TokenService(UserManager<AppUser> userManager, IConfiguration confi
     var roles = await _userManager.GetRolesAsync(user);
     var claims = new List<Claim>
     {
-      new (JwtRegisteredClaimNames.GivenName, user.UserName!),
+      new(JwtRegisteredClaimNames.GivenName, user.UserName!),
       new(JwtRegisteredClaimNames.Email, user.Email!),
+      new(ClaimTypes.NameIdentifier, user.Id)
     };
-    
+
     claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
     var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));

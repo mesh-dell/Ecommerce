@@ -10,10 +10,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Ecommerce.Services;
 
-public class TokenService(UserManager<AppUser> userManager, IConfiguration config) : ITokenService
+public class TokenService(UserManager<AppUser> userManager) : ITokenService
 {
   private readonly UserManager<AppUser> _userManager = userManager;
-  private readonly IConfiguration _config = config;
   public async Task<string> CreateTokenAsync(AppUser user)
   {
     var roles = await _userManager.GetRolesAsync(user);
@@ -26,11 +25,12 @@ public class TokenService(UserManager<AppUser> userManager, IConfiguration confi
 
     claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
-    var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
+    var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY") ??
+     throw new InvalidOperationException("JWT_KEY environment variable is missing or empty.")));
     var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
     var token = new JwtSecurityToken(
-      issuer: _config["Jwt:Issuer"],
-      audience: _config["Jwt:Audience"],
+      issuer: Environment.GetEnvironmentVariable("JWT_ISSUER"),
+      audience: Environment.GetEnvironmentVariable("JWT_AUDIENCE"),
       claims: claims,
       expires: DateTime.Now.AddHours(1),
       signingCredentials: creds

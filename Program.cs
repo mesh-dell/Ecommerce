@@ -13,13 +13,21 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+DotNetEnv.Env.Load();
+
 builder.Services.AddOpenApi(opt =>
 {
   opt.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
 });
 
+var connectionString = $"Host={Environment.GetEnvironmentVariable("DB_HOST")};" +
+                       $"Port={Environment.GetEnvironmentVariable("DB_PORT")};" +
+                       $"Database={Environment.GetEnvironmentVariable("DB_NAME")};" +
+                       $"Username={Environment.GetEnvironmentVariable("DB_USERNAME")};" +
+                       $"Password={Environment.GetEnvironmentVariable("DB_PASSWORD")};";
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-  options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+  options.UseNpgsql(connectionString));
 
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 {
@@ -46,9 +54,10 @@ builder.Services.AddAuthentication(
     ValidateAudience = true,
     ValidateLifetime = true,
     ValidateIssuerSigningKey = true,
-    ValidIssuer = builder.Configuration["Jwt:Issuer"],
-    ValidAudience = builder.Configuration["Jwt:Audience"],
-    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+    ValidIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER"),
+    ValidAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE"),
+    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY") ??
+     throw new InvalidOperationException("JWT_KEY environment variable is missing or empty.")))
   };
 });
 

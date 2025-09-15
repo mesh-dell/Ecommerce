@@ -1,9 +1,3 @@
-Got it 👍 — I’ll update the README so it’s clear the app requires **PostgreSQL** and the user must create a database before running migrations.
-
-Here’s the improved **README.md**:
-
----
-
 # Ecommerce Application
 
 A **.NET-based eCommerce application** with a clean architecture, supporting product management, orders, and JWT authentication.

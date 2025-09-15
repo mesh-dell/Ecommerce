@@ -1,3 +1,9 @@
+Got it 👍 — I’ll update the README so it’s clear the app requires **PostgreSQL** and the user must create a database before running migrations.
+
+Here’s the improved **README.md**:
+
+---
+
 # Ecommerce Application
 
 A **.NET-based eCommerce application** with a clean architecture, supporting product management, orders, and JWT authentication.
@@ -9,7 +15,7 @@ A **.NET-based eCommerce application** with a clean architecture, supporting pro
 * Product catalog (CRUD)
 * Order management
 * Authentication & Authorization with JWT
-* Database integration using Entity Framework Core
+* Database integration using **PostgreSQL + Entity Framework Core**
 * API documentation powered by **Scalar**
 
 ---
@@ -29,33 +35,43 @@ cd Ecommerce
 dotnet restore
 ```
 
-### 3. Create a `.env` file
+### 3. Create a PostgreSQL database
+
+Make sure you have PostgreSQL installed and running.
+
+Create a new database for the application:
+
+```sql
+CREATE DATABASE ecommerce;
+```
+
+### 4. Create a `.env` file
 
 In the project root, create a `.env` file with the following variables:
 
 ```env
 # Database connection
-DB_HOST=
-DB_PORT=
-DB_NAME=
-DB_USERNAME=
-DB_PASSWORD=
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=ecommerce
+DB_USERNAME=your_postgres_username
+DB_PASSWORD=your_postgres_password
 
 # JWT settings
-JWT_KEY=
-JWT_ISSUER=
-JWT_AUDIENCE=
+JWT_KEY=your_secret_key
+JWT_ISSUER=EcommerceApp
+JWT_AUDIENCE=EcommerceUsers
 ```
 
-Fill in values according to your local or production environment.
+Replace the values with your PostgreSQL setup.
 
-### 4. Apply database migrations
+### 5. Apply database migrations
 
 ```bash
 dotnet ef database update
 ```
 
-### 5. Run the project
+### 6. Run the project
 
 ```bash
 dotnet run
@@ -71,7 +87,7 @@ Once the application is running, open your browser and go to:
 http://localhost:5000/scalar/v1
 ```
 
-(or the port configured in your environment)
+(or the port configured in your environment).
 
 This will open the **Scalar API Docs**, where you can explore all available endpoints interactively.
 
@@ -81,9 +97,9 @@ This will open the **Scalar API Docs**, where you can explore all available endp
 
 * **.NET (Web API)**
 * **Entity Framework Core**
+* **PostgreSQL** (relational database)
 * **Scalar** for API documentation
 * **JWT** for authentication
-* **SQL Database** (configurable via `.env`)
 
 ---
 
@@ -102,6 +118,3 @@ This will open the **Scalar API Docs**, where you can explore all available endp
 MIT License — feel free to use and modify.
 
 ---
-
-Would you like me to also include **example endpoints** (e.g., `/api/products`, `/api/orders`) in the README so users get a quick idea of what the API supports without opening Scalar?
-bb
